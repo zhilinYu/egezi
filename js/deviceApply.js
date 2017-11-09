@@ -64,7 +64,7 @@ function loadList(getpage) {
 					row += '</tr>';
 				}
 				$("#list").append(row);
-				$("#cur_page").text(page === undefined ? 0 : （page + 1）);
+				$("#cur_page").text(page === undefined ? 0 : (page + 1));
                 $("#page_count").text(page_count === undefined ? 0 ： page_count);			
 			} else {
 				$("#list tr").remove();
