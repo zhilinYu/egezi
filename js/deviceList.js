@@ -74,7 +74,7 @@ function loadList(getpage) {
                 }
                 $("#list").append(row);
                 $("#cur_page").text(page === undefined ? 0 : (page + 1));
-                $("#page_count").text(page_count === undefined ? 0 ： page_count);
+                $("#page_count").text(page_count === undefined ? 0 : page_count);
                 $("#totalBoxes").text(totalDevice);
                 $("#breakdownBoxes").text(breakdownDevice);
             } else {
