@@ -5,7 +5,7 @@ var page_count = 0;
 var statusArr = ["正常", "正常", "缺货", "故障","停止","柜子为空"];
 var belongArr = ["","平台","","第三方商家"];
 var device_typeArr = ["", "小型", "", "", "中型", "", "", "", "大型"];
-var apply_statusArr = ["","申请中","安装中","完S成"];
+var apply_statusArr = ["","申请中","安装中","完成"];
 var newDate = new Date();
 var page = 0,page_count = 0;
 
@@ -73,7 +73,7 @@ function loadList(getpage) {
                     row += '</tr>';
                 }
                 $("#list").append(row);
-                $("#cur_page").text(page === undefined ? 0 : page + 1);
+                $("#cur_page").text(page === undefined ? 0 : (page + 1));
                 $("#page_count").text(page_count === undefined ? 0 ： page_count);
                 $("#totalBoxes").text(totalDevice);
                 $("#breakdownBoxes").text(breakdownDevice);
