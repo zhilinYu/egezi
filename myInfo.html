@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title>personage</title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/jquery.js"></script>
+<script src="js/pintuer.js"></script>
+<script src="js/distpicker/distpicker.data.js"></script>
+<script src="js/distpicker/distpicker.js"></script>
+<script src="js/main.js"></script>
+<script>
+        if (getcookie("is_login") !== "1") {
+            location.href = "/login.html";
+        }
+</script>
+<style>
+  .form-group{
+    font-size: 15px;
+    margin-left: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-group"></span> 个人信息</strong></div>
+  <div class="body-content">
+      <div class="form-group">
+        <div class="label">
+          <label>姓名：</label> 
+          <span name="name"></span>
+        </div>       
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>工号：</label>
+          <span name="job_member"></span>
+        </div>
+      </div>
+     <div class="form-group">
+        <div class="label">
+          <label>区域信息：</label><span name="region"></span>
+        </div>     
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>工作类型：</label><span name="work_role"></span>
+        </div>
+    
+      </div>
+       <div class="form-group">
+        <div class="label">
+          <label>电话：</label><span name="phone"></span>
+        </div>     
+      </div>
+       <div class="form-group">
+        <div class="label">
+          <label>QQ：</label><span name="qq"></span>
+        </div>    
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>工作内容：</label><span name="work_content"></span>
+        </div>    
+      </div>  
+      <div class="form-group">
+        <div class="label">
+          <label>状态：</label><span name="status"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>注册日期：</label><span name="register_date"></span>
+        </div>     
+      </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+  $(function(){
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: "/auto/user_info/",
+        data: {
+          job_member: getcookie("job_member")       
+        },
+        success: function(res) {
+            var code = res.code;
+            var data = res.data;
+            var tmpRole = "";
+            switch (data.work_role) {
+                case 32:
+                    tmpRole = "系统管理员";
+                    break;
+                case 16:
+                    tmpRole = "加盟商管理员";
+                    break;
+                case 14:
+                    tmpRole = "平台管理员";
+                    break;
+                case 12:
+                    tmpRole = "平台运营人员";
+                    break; 
+                case 10:
+                    tmpRole = "平台维护人员";
+                    break;
+                case 8:
+                    tmpRole = "第三方管理人员";
+                    break;
+                case 6:
+                    tmpRole = "第三方运营人员";
+                    break;
+            }
+            $("span[name=job_member]").text(data.job_member);  
+            $("span[name=name]").text(data.name);  
+            $("span[name=work_role]").text(tmpRole);  
+            $("span[name=region]").text(getPositionByCode(data.region));  
+            $("span[name=phone]").text(data.phone);  
+            $("span[name=qq]").text(data.qq);  
+            $("span[name=work_content]").text(data.work_content);  
+            $("span[name=register_date]").text(new Date(parseInt(data.register_date)*1000).toLocaleDateString());  
+            $("span[name=status]").text(data.status === 1 ? "正常" : "注销");  
+            //$("span[name=merchant_number]").text(data.merchant_number);  
+        }        
+    });
+});
+</script>

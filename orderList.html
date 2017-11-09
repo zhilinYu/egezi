@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>orderList</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="js/layui/css/layui.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="js/layui/lay/dest/layui.all.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/orderList.js"></script>
+</head>
+
+<body>
+    <div class="panel admin-panel">
+        <div class="panel-head"><strong class="icon-reorder"> 订单列表</strong></div>
+        <table class="table" style="padding: 10px;border-bottom:1px solid #ddd;">
+            <th style="border-bottom:0;text-indent: -21px;">
+                <span class="tips1" style="color: red">注：查询条件可不填，默认显示最近15天的订单。</span>
+                <span class="result" style="padding:5px 0">查询结果：所有订单累计金额：<em id="totalMoney">00.00</em></span>
+            </th>
+            <tr>
+                <td colspan="" style="text-align:left;padding-left:20px;">
+                    <span>订单号</span>
+                    <input type="text" name="_id" style="padding:5px; margin-right:20px;border:1px solid #ddd;" placeholder="默认为全部">
+                    <span>商家账户</span>
+                    <input type="text" name="merchant_account" style="padding:5px; margin-right:20px;border:1px solid #ddd;" placeholder="默认为全部">
+                </td>
+                <td>
+                    <div class="layui-form-pane" style="margin: 5px 0;">
+                            <label class="layui-form-label">查询时间</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="开始日" id="LAY_demorange_s">
+                            </div>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="截止日" id="LAY_demorange_e">
+                            </div>
+                            <a href="javascript:void(0);" class="button border-blue icon-search " style="padding:5px 15px; margin:0 10px; " onclick="loadList(0)"> 查询</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-hover text-center" id="maintable">
+            <thead>
+                <tr style="text-align:left">
+                    <th>序号</th>
+                    <th>订单号</th>
+                    <!-- <th>商家账户</th> -->
+                    <th>商家名称</th>
+                    <th>设备编码</th>
+                    <th>设备地址</th>
+                    <th>交易金额（元）</th>
+                    <th>订单状态</th>
+                    <th>交易时间</th>
+                    <th>商品信息</th>
+                </tr>
+            </thead>
+            <tbody name="list" id="list">
+            </tbody>
+        </table>
+        <ul style="padding:5px 15px; border-top:1px solid #ddd;text-align: right;">
+            <li colspan="13">
+                <div class="pagelist"> <a href="javascript:void(0);" id="prev">上一页</a> <a href="javascript:void(0);" id="next">下一页</a>&nbsp;第<span id="cur_page">0</span>页/共<span id="page_count">0</span>页</div>
+              <!--  <div id="pagelist" colspan="13" style="margin: 0 auto"></div> -->
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

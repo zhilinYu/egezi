@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>首页</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/echarts.common.min.js"></script>
+    <script src="js/pintuer.js"></script>
+	<script src="js/info.js"></script>
+</head>
+<style type="text/css">
+    .form-x .form-group .label{ width:38%;}
+    .label label{font-weight: 900;font-size: 16px;}
+</style>
+<body>
+    <div class="panel admin-panel">
+        <div class="panel-head"><strong><span class="icon-pencil-square-o"></span> 统计数据</strong></div>
+        <div class="body-content">
+                <div class="form-group fl" style="margin: 0 50px">
+                    <div class="label">
+                        <label>运行设备/总设备</label>
+                    </div>
+                    <input type="button" class="button bg-blue margin-left" id="devices_Nums" style="margin:0 33px">
+                </div>
+                <div class="form-group fl" style="margin: 0 50px">
+                    <div class="label">
+                        <label>第三方商家/加盟商家</label>
+                    </div>
+                    <input type="button" class="button bg-blue margin-left" id="marchants_Nums" style="margin:0 50px">
+                </div>
+                <div class="form-group fl" style="margin: 0 50px">
+                    <div class="label">
+                        <label>本月平台盈利（元）</label>
+                    </div>
+                    <input type="button" class="button bg-blue margin-left" id="current_month_profit" style="margin:0 14px">
+                </div>
+        </div>
+        <div class="body-content">
+            <div class="form-group">
+
+                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                    <div id="echarts1" style="width: 400px;height:290px;float: left;margin:0px 40px 0 20px"></div>
+            </div>
+
+            <div class="form-group">
+
+                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                    <div id="echarts2" style="width: 400px;height:290px;float: left;margin:-22px 40px 0 23px"></div>
+
+           </div>
+        </div>
+        </form>
+    </div>
+    </div>
+</body>
+</html>

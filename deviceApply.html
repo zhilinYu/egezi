@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title></title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="js/layui/css/layui.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="js/layui/lay/dest/layui.all.js"></script>
+    <script src="js/distpicker/distpicker.data.js"></script>
+    <script src="js/distpicker/distpicker.js"></script>
+    <!-- <script src="js/AreaData_min.js"></script>
+    <script src="js/city.js"></script> -->
+    <script src="js/main.js"></script>
+    <script src="js/deviceApply.js"></script>
+    <script>
+        if (getcookie("is_login") !== "1") {
+            location.href = "/login.html";
+        }
+    </script>
+</head>
+<style>
+    .table td{padding: 4px}
+</style>
+<body>
+        <div class="panel admin-panel">
+            <div class="panel-head"><strong class="icon-reorder"> 设备申请</strong></div>
+
+              <ul style="padding: 10px;border-bottom:1px solid #ddd;">
+                     <li colspan="16" style="text-align:left;padding-left:15px;"> 商家账号&nbsp;                       
+                        <input type="text" name="merchant_account_search" style="padding:5px; border:1px solid #ddd;" placeholder="默认为全部">
+                        &nbsp;&nbsp; 状态&nbsp;&nbsp;&nbsp;
+                        <select name="apply_status" style="padding:5px 15px; border:1px solid #ddd; ">
+                            <option value="4">全部</option>
+                            <option value="1">申请中</option>
+                            <option value="2">安装中</option>
+                            <option value="3">完成</option>
+                        </select>
+                        <a href="javascript:void(0)" class="button border-blue icon-search" style="padding:5px 15px; margin:0 10px;" onclick="loadList(page);"> 查询</a>
+              <!--           <a href="javascript:void(0)" class="button border-blue icon-download" style="padding:5px 15px; margin:0 10px;" onclick=""> 设备二维码下载</a> -->
+                        <button style="padding:5px 15px; margin:0 10px;" class="button border-blue" onclick="addOrEdit(0);"><span class="icon-plus-square-o"></span> 新增</button>
+                    </li>
+            </ul>
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>商家账号</th>
+                        <th>商家名称</th>
+                        <th>地区</th>
+                        <th>设备归属</th>
+                        <th>设备类型</th>
+                        <th>货机数量</th>
+                        <th>安装地址</th>
+                        <th>商家联系人</th>
+                        <th>联系电话</th>
+                        <th>申请时间</th>
+                        <th>设备编号</th>
+                        <th>维护人员</th>
+                        <th>维护人员电话</th>
+                        <th>运营人员</th>
+                        <th>运营人员电话</th>
+                        <th>完成时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                <thead>
+                <tbody name="list" id="list">
+                    <tr><td colspan="19" style="font-size: 14px;line-height: 30px">没有任何数据</td></tr> 
+                </tbody>
+            </table>
+           <ul style="padding:5px 15px;text-align: right;">
+                <li colspan="16">
+                    <div class="pagelist">
+                        <a href="javascript:void(0);" id="prev">上一页</a>
+                        <a href="javascript:void(0);" id="next">下一页</a>&nbsp;第<span id="cur_page">0</span>页/共<span id="page_count">0</span>页</div>
+                </li>
+            </ul>
+        </div>
+        <div class="form-x" id="editBox" style="display:none;padding:10px;">
+            <form class="form-x" action="" name="form1" id="ajaxForm">
+                <div class="form-group">
+                    <div class="label">
+                        <label>商家账号<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" name="merchant_account" data-validate="required:请输入商家账户"/>
+                        <input type="hidden" id="tmpType">
+                    </div>
+                </div>
+                <div class="form-group">
+                        <div class="label">
+                            <label>地区<strong style="color: red"> * </strong> </label>
+                        </div>
+                        <div class="field">
+                            <div data-toggle="distpicker" id="regionArea">
+                              <select id="province" class="input w5" data-validate="required:必选"></select>
+                              <select id="city" class="input w5" style="margin: 0 15px;" data-validate="required:必选"></select>
+                              <select id="district" class="input w5" data-validate="required:必选"></select>
+                            </div>
+                            <script>
+                                $('#regionArea').distpicker({autoSelect: false});
+                            </script>
+                        </div>                      
+                </div>               
+                <div class="form-group">
+                    <div class="label">
+                        <label>设备归属<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <select name="belong" class="input w50" data-validate="required:请选择服务类型">
+                            <option value="">请选择</option>
+                            <option value="1">平台</option>
+                            <option value="3">商家</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>设备类型<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <select name="device_type" class="input w50" data-validate="required:请选择设备类型">
+                            <option value="">请选择</option>
+                            <option value="1">小型</option>
+                            <option value="2">中型</option>
+                            <option value="3">大型</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>柜机数量<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <input type="number" class="input w50" value="" name="good_boxes" data-validate="required:请输入柜机数量"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>安装地址<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" value="" name="detail_address" data-validate="required:请输入安装地址" />
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>商家联系人<strong style="color: red"> * </strong></label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" value="" name="merchant_linker" />
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>联系人电话<strong style="color: red"> * </strong></label>
+                    </div>
+                    <div class="field">
+                        <input type="number" class="input w50" value="" name="merchant_linker_phone" maxlength="11" data-validate="required:必填,mobile:请输入正确的手机号码" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>设备编号<strong style="color: red"> * </strong></label>
+                    </div>
+                    <div class="field" style="margin: 0px;">
+                        <input type="text" class="input w50" value="" name="device_id" />
+                        <div style="line-height: 42px;">
+                            <input type="button" value="自动生成" class="button border-blue" style="margin:0 20px;padding: 5px;" onclick="getCode();">
+                            <div class="tips" style="color: red;">注：设备编码自动生成，根据的是选中的城市、区县，自动进行编码</div>
+                        </div>
+                    </div>
+
+                <div class="form-group">
+                    <div class="label">
+                        <label>维护人员<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <select name="maintainer" class="input w50" data-validate="required:请选择维护人员"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>维护人员电话<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <input type="number" class="input w50" name="maintainer_phone" maxlength="11" data-validate="required:必填,mobile:请输入正确的手机号码" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>运营人员<strong style="color: red"> * </strong> </label>
+                    </div>
+                    <div class="field">
+                        <select name="operation" class="input w50" data-validate="required:请选择运营人员"></select>
+                        <div style="line-height: 42px;">
+                            <input type="button" value="获取运营人员" style="margin:0 20px;padding: 5px;" class="button border-blue" id="btn_operation">
+                            <p class="tips" style="color: red;">
+                            注：根据商家登录账户查询，如是平台商家，获取平台商家的运营人员列表，如是加盟商家，获取平台的运营人员</p>
+                        </div>
+                    </dv>
+                </div>
+              <div class="form-group">
+                <div class="label">
+                  <label>运营人员电话<strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" name="operation_phone" maxlength="11" data-validate="required:必填,mobile:请输入正确的电话号码" />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="label">
+                  <label>预计完成时间<strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input class="input w50" placeholder="请点击选择日期和时间" id="LAY_demorange_s" name="pre_finish_time" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" data-validate="required:请选择预计完成时间"/>
+                </div>
+              </div>
+              <div class="form-group" style="text-align: center;">
+                <button href="javascript:void(0)" class="button bg-blue icon-check-square-o" type="submit" id="submitBtn">提交</button>
+                <button href="javascript:void(0)" class="button bg-red icon-undo" type="button" id="cancalBtn">取消</button>
+              </div>
+    </form>
+    </div>
+</body>
+</html>

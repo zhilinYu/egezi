@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title></title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="js/layui/css/layui.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="js/layui/lay/dest/layui.all.js"></script>
+    <script src="js/distpicker/distpicker.data.js"></script>
+    <script src="js/distpicker/distpicker.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/operation.js"></script>
+    <script>
+        if (getcookie("is_login") !== "1") {
+            location.href = "/login.html";
+        }
+    </script>
+</head>
+
+<body>
+    <div class="body-content panel admin-panel" id="seeAboutBox" style="padding: 10px;border: 0;">
+        <!-- <table class="seeAbout table table-striped">
+            <tr>
+                <td>商家编号：<span class="merchant_number"></span></td>
+                <td>商家账号：<span class="merchant_account"></span></td>
+                <td>商家名称：<span class="merchant_name"></span></td>
+            </tr>
+            <tr>
+                <td>商家类型：<span class="merchant_type"></span></td>
+                <td>商家联系人：<span class="merchant_linker"></span></td>
+                <td>联系电话：<span class="merchant_linker_phone"></span></td>
+            </tr>
+            <tr>
+                <td>开户行名称：<span class="bank_name"></span></td>
+                <td>持卡人：<span class="cardholder"></span></td>
+                <td>银行卡号：<span class="card"></span></td>
+            </tr>
+            <tr>
+                <td>地区：<span class="region_code"></span></td>
+                <td>提成率：<span class="rate"></span></td>
+                <td>余额：<span class="remain_money"></span></td>
+            </tr>
+            <tr>
+                <td>自助柜数量：<span class="device_number"></span></td>
+                <td>状态：<span class="status"></span></td>
+                <td>注册时间：<span class="register_date"></span></td>
+            </tr>
+        </table> -->
+        <table class="table table-hover text-center" id="operation_table">
+            <tr style="text-align:left" id="operation_thead">
+                <th>序号</th>
+                <th>商家账号</th>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>工作类型</th>
+                <th>区域信息</th>
+                <th>手机号码</th>
+                <th>QQ</th>
+                <th>工作内容</th>
+                <!-- <th>设备维护数量</th> -->
+                <th>状态</th>
+                <th>注册日期</th>
+                <!-- <th>操作</th> -->
+            </tr>
+            <tbody name="list" id="list">   
+                <tr><td colspan="13" style="font-size: 14px;line-height: 30px">没有任何数据</td></tr>           
+            </tbody>            
+        </table>     
+        <ul style="padding:5px 15px; border-top:1px solid #ddd;text-align: right;">
+                <!-- <li class="fl">
+                    <button style="padding:2px 15px; margin:10px 0 0 0;" class="button border-blue" onclick="addOrEdit(0);"><span class="icon-plus-square-o"></span> 新增</button>&nbsp;&nbsp;
+                    <button style="padding:2px 15px; margin:10px 200px 0 0;" class="button border-main" onclick="loadList(0);"><span class="icon-refresh"></span> 刷新</button>
+                </li> -->
+                <li colspan="13">                    
+                    <div class="pagelist">                        
+                        <a href="javascript:void(0);" id="prev">上一页</a> 
+                        <a href="javascript:void(0);" id="next">下一页</a>&nbsp;第
+                        <span id="cur_page">0</span>页/共
+                        <span id="page_count">0</span>页
+                    </div>
+                </li>
+        </ul>
+    </div>   
+</body>
+
+</html>

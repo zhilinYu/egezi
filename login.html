@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>登录</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body onload="body_onload()">
+    <div class="bg"></div>
+    <div class="container">
+        <div class="line bouncein">
+            <div class="xs6 xm4 xs3-move xm4-move">
+                <div style="height:150px;"></div>
+                <div class="media media-y margin-big-bottom">
+                </div>
+                <form method="get" action="" async="true">
+                    <div class="panel loginbox">
+                        <div class="text-center margin-big padding-big-top">
+                            <h1>e格子自助售货柜后台系统</h1></div>
+                        <div class="panel-body" style="padding:30px; padding-bottom:10px; padding-top:10px;">
+                            <div class="form-group">
+                                <div class="field field-icon-right">
+                                    <input type="text" id="phone" class="input input-big" name="phone" placeholder="登录账号" data-validate="required:请填写账号" />
+                                    <span class="icon icon-user margin-small"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="field field-icon-right">
+                                    <input type="password" id="password" class="input input-big" name="password" placeholder="登录密码" data-validate="required:请填写密码" />
+                                    <span class="icon icon-key margin-small"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="field">
+                                    <input type="checkbox" id="chx_save_auth" />记住密码</p>
+                                    <!-- <input type="text" class="input input-big" name="code" placeholder="填写右侧的验证码" data-validate="required:请填写右侧的验证码" />
+                                    <img src="images/passcode.jpg" alt="" width="100" height="32" class="passcode" style="height:43px;cursor:pointer;" onclick="this.src=this.src+'?'"> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding:30px;">
+                            <input id="submitBtn" type="button" class="button button-block bg-main text-big input-big" value="登录" onclick="alert_login();">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+function body_onload() {
+    if (1 == get_saveauth_cookies()) {
+        var tmp_user = '';
+        var tmp_pwd = '';
+
+        tmp_user = get_user_cookies();
+        tmp_pwd = get_pwd_cookies();
+
+        document.getElementById("phone").value = tmp_user;
+        document.getElementById("password").value = tmp_pwd;
+        document.getElementById("chx_save_auth").checked = true;
+    }
+}
+
+function alert_login() {
+    if (document.getElementById("chx_save_auth").checked == true) {
+        var cookies_uesr = document.getElementById("phone").value;
+        var cookies_pwd = document.getElementById("password").value;
+        setcookie('loginuser', cookies_uesr, 1440);
+        setcookie('loginpwd', cookies_pwd, 1440);
+        setcookie('saveauth', 1, 1440);
+    } else {
+        setcookie('saveauth', 0, 1440);
+    }
+    submitAjax();
+}
+
+function get_user_cookies() {
+    var tmp_val = getcookie('loginuser');
+    return tmp_val;
+}
+
+function get_pwd_cookies() {
+    var tmp_val = getcookie('loginpwd');
+    return tmp_val;
+}
+
+function get_saveauth_cookies() {
+    var tmp_val = getcookie('saveauth');
+    return tmp_val;
+}
+
+function submitAjax() {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: "/auto/login/", //传入后台的地址/方法
+        data: {
+            phone: $('#phone').val(),
+            password: $('#password').val(),
+            mobile: IsMobile()
+        },
+        success: function(data) {
+            var code = data.code;
+            var data = data.data;
+            var state = data.state;
+            var work_role = data.work_role;
+            if (state === 1) {
+                location.href = "/index.html";
+            } else {
+                alert("账号或密码错误!");
+            }
+        },
+        error: function(err) {
+            alert("登录失败！");
+        }
+    });
+}
+
+document.onkeypress = viewKeyInfo;
+
+function viewKeyInfo(e) {
+    var e = e || event;
+    if ((e['keyCode'] == 13) || (e['which'] == 13)) {
+        alert_login();
+    }
+}
+</script>
+
+</html>

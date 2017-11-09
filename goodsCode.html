@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>商品编码管理</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="js/layui/css/layui.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="js/layui/lay/dest/layui.all.js"></script>
+    <script src="js/tableExport/table2excel.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/goodsCode.js"></script>
+    <script>
+        if (getcookie("is_login") !== "1") {
+            location.href = "/login.html";
+        }
+    </script>
+</head>
+
+<body>
+    <div class="panel admin-panel">
+        <div class="panel-head"><strong class="icon-reorder"> 商品编码管理</strong></div>
+        <ul>
+            <li colspan="13" style="text-align:left;padding:20px;">
+                <strong>查询条件：</strong>
+                <span style="padding:0 10px 0 10px;">商品类型</span>
+                <select name="resale" style="padding:5px 15px; border:1px solid #ddd;">
+                    <option value="2" class="all">全部</option>
+                    <option value="1" class="isResale">零售</option>
+                    <option value="0" class="notResale">非零售</option>
+                </select>
+                <span style="padding:0 10px 0 10px; ">状态</span>
+                <select name="status" style="padding:5px 15px; border:1px solid #ddd;">
+                    <option value="2">所有</option>
+                    <option value="1">正常</option>
+                    <option value="0">注销</option>
+                </select>
+                &nbsp;&nbsp;&nbsp;
+                <button class="button border-blue icon-search" style="padding:5px 15px; margin:0 10px;" onclick="loadList(0)"> 查找</button>
+                <button class="button border-blue" style="padding:5px 15px; margin:0 10px;" onclick="addOrEdit(0)"><span class="icon-plus-square-o"></span> 新增</button>
+                <button class="button border-blue icon-share" style="padding:5px 15px;margin:0 10px;" id="exclebtn"> excel导出</button>
+            </li>
+        </ul>
+        <table class="table table-hover text-center" id="goodsTable">
+            <thead>
+                <tr style="text-align:left" id="thead">
+                    <th>序号</th>
+                    <th>商品编码</th>
+                    <th>商品名称</th>
+                    <th>商品图片</th>
+                    <!-- <th>图片ID</th> -->
+                    <th>商品类型</th>
+                    <th>商品类别</th>
+                    <th>单价（元）</th>
+                    <th>成本价格（元）</th>
+                    <th>有效期（天）</th>
+                    <th>注册人员</th>
+                    <th>状态</th>
+                    <th>注册日期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody name="list" id="list">
+                <tr><td colspan="14" style="font-size: 14px;line-height: 30px">没有任何数据</td></tr> 
+            </tbody>
+        </table>
+        <ul style="padding:5px 15px; border-top:1px solid #ddd;text-align: right;">
+            <li colspan="13">
+                <div class="pagelist"> <a href="javascript:void(0);" id="prev">上一页</a> <a href="javascript:void(0);" id="next">下一页</a>&nbsp;第<span id="cur_page">0</span>页/共<span id="page_count">0</span>页</div>
+                <!--  <div id="pagelist" colspan="13" style="margin: 0 auto"></div> -->
+            </li>
+        </ul>
+    </div>
+    <div class="form-x" id="editBox" style="display: none;padding: 10px;">
+        <form action="" id="ajaxForm">
+            <div class="form-group">
+                <div class="label">
+                    <label>商品名称 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" name="goods_name" data-validate="required:请输入商品名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>商品编码 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="" name="bar_code" data-validate="required:请输入商品编码，非零售商品编码为6位数字,number:只能为数字"/>
+                </div>
+            </div>
+            <div class="form-group" id="uploadForm">
+                <div class="label">
+                    <label>商品图片 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field" style="margin-top: 8px">
+                    <!--            <input type="text" id="url1" name="img" class="input tips" style="width:25%; float:left;"  value=""  data-toggle="hover" data-place="right" data-image="" /> -->
+                    <!-- <input type="button" value="选择上传图片" onclick="path.click()">
+        <input type="file" id="path" style="display:none" onchange="upfile.value=this.value">
+        <input type="text" readonly size="25" name="upfile" id="upfile"  class="tips" style="border:1px dotted #ccc" value=""  data-toggle="hover" data-place="right" data-image="" /> -->
+                    <input type="file" id="file" class="input w50" name="images" accept="image/gif, image/jpeg" multiple="false" data-validate="required:必选"/>
+                    <input type="hidden" id="hidden">&nbsp;&nbsp;&nbsp;
+                    <a id="upload" href="javascript:void(0)" class="button border-blue" style="padding: 5px 10px;" onclick="uploadPicture('/auto/images/')">上传</a>
+                </div>                          
+            </div>
+            <div id="progress" class="progress progress-small" style="display: none;width: 350px;margin-left: 86px">
+                    <div id="progressNumber" class="progress-bar bg-yellow" style="width: 0%;"></div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>商品类型 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field" style="padding-top:8px;">
+                    <label for="isresale">零售
+                    <input id="isresale" type="radio" name="resale" value="1" data-validate="radio:"/></label>
+                    <label for="notresale">非零售
+                    <input id="notresale" type="radio" name="resale" value="0" data-validate="radio:"/></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>商品类别 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <select name="type" class="input w50" data-validate="required:请选择商品类别">
+                        <option value="">请选择</option>
+                        <option value="蔬菜">蔬菜</option>
+                        <option value="饮料">饮料</option>
+                        <option value="水果">水果</option>
+                    </select>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            </if>
+            <div class="form-group">
+                <div class="label">
+                    <label>单价 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="" name="sale_price" data-validate="required:请输入商品单价,number:只能为数字" placeholder="单位：元" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>成本 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="" name="cost_price" data-validate="required:请输入商品成本,number:只能为数字" placeholder="单位：元"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>注册人员 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" name="register" data-validate="required:请输入注册人员" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>商品有效期 <strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="" name="expire_time" data-validate="required:请输入商品有效期,number:只能为数字" placeholder="单位：天"/>
+                </div>
+            </div>
+            <div class="form-group" style="text-align: center;">
+                <button class="button bg-blue icon-check-square-o" type="submit" id="submitBtn"> 提交</button>
+                <button class="button bg-red icon-undo" type="button" id="cancalBtn"> 取消</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

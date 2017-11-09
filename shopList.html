@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>商家列表</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="js/layui/css/layui.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script src="js/layui/lay/dest/layui.all.js"></script>
+    <script src="js/distpicker/distpicker.data.js"></script>
+    <script src="js/distpicker/distpicker.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/shopList.js"></script>
+    <script>
+        if (getcookie("is_login") !== "1") {
+            location.href = "/login.html";
+        }
+    </script>
+</head>
+<style>
+#seeAboutBox tr td {
+    font-size: 14px;
+}
+</style>
+
+<body>
+    <div class="panel admin-panel">
+        <div class="panel-head"><strong class="icon-reorder"> 商家列表</strong>
+            &nbsp;&nbsp;&nbsp;<button style="padding:2px 15px; margin:0 10px;" class="button border-blue" onclick="addOrEdit(0);"><span class="icon-plus-square-o"></span> 新增</button>
+        </div>
+        <!--    <div class="padding border-bottom">
+                <ul class="search" style="padding-left:10px;">
+                    <li> <button class="button border-blue icon-plus-square-o" onclick="addOrEdit(0)"> 新增商家</button> </li>
+                    <li>
+                        <input type="text" placeholder="请输入搜索关键字" name="keywords" class="input" style="width:250px; line-height:17px;display:inline-block" />
+                        <a href="javascript:void(0)" class="button border-main icon-search" onclick="loadList(page)"> 搜索</a>
+                    </li>
+                </ul>
+            </div> -->
+        <table class="table table-hover text-center">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>商家编号</th>
+                    <th>商家帐号</th>
+                    <th>商家名称</th>
+                    <th>区域信息</th>
+                    <th>商家类型</th>
+                    <th>联系人</th>
+                    <th>电话号码</th>
+                    <!--<th>卡号</th>
+                        <th>持卡人</th>
+                        <th>开户行名称</th>
+                        <th>提成率</th>
+                        <th>余额</th>
+                        <th>设备数量</th>-->
+                    <th>状态</th>
+                    <th>注册日期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody name="list" id="list">
+                 <tr><td colspan="13" style="font-size: 14px;line-height: 30px">没有任何数据</td></tr> 
+            </tbody>
+        </table>
+        <!-- <div class="padding border-top" style="padding-left:20px;">
+            <ul class="search">
+                <li>
+                    <button style="padding:5px 15px; margin:0 10px;" class="button border-blue" onclick="addOrEdit(0);"><span class="icon-plus-square-o"></span> 新增</button>
+                </li>
+            </ul>
+        </div> -->
+        <ul style="padding:5px 15px; border-top:1px solid #ddd;text-align: right;">
+            <li colspan="13">
+                <div class="pagelist">
+                    <a href="javascript:void(0);" id="prev">上一页</a>
+                    <a href="javascript:void(0);" id="next">下一页</a>&nbsp;第<span id="cur_page">0</span>页/共<span id="page_count">0</span>页</div>
+            </li>
+        </ul>
+    </div>
+    <div class="form-x" id="editBox" style="display:none;padding:10px;">
+        <form class="form-x" action="" name="form1" id="ajaxForm">
+            <div class="form-group" style="display: none" id="merchant_name_c">
+                <div class="label">
+                    <label>商家编号<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" name="merchant_number"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>商家名称<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" name="merchant_name" data-validate="required:请输入商家名称" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                        <div class="label">
+                            <label>地区<strong style="color: red"> * </strong> </label>
+                        </div>
+                        <div class="field">
+                            <div data-toggle="distpicker" id="regionArea">
+                              <select id="province" class="input w5" data-validate="required:必选"></select>
+                              <select id="city" class="input w5" style="margin: 0 15px;" data-validate="required:必选"></select>
+                              <select id="district" class="input w5" data-validate="required:必选"></select>
+                            </div>
+                            <script>
+                                $('#regionArea').distpicker({autoSelect: false});
+                            </script>
+                        </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>商家类型<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <select name="merchant_type" class="input w50" data-validate="required:请选择商家类型">
+                        <option value="">请选择类型</option>
+                        <option value="1">第三方商家</option>
+                        <option value="2">加盟商家</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>联系人<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" name="merchant_linker" data-validate="required:请输入联系人" />
+                    <!--  <input type="text" id="url1" name="img" class="input tips" style="width:25%; float:left;"  value=""  data-toggle="hover" data-place="right" data-image="" /> -->
+                    <!--  <input type="button" class="button bg-blue margin-left" id="image1" value="+ 浏览上传"  style="float:left;">
+          <div class="tipss">图片尺寸：500*500</div> -->
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>联系电话<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="" name="merchant_linker_phone" maxlength="11" data-validate="required:必填,mobile:请输入正确的手机号码" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>银行卡号<strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="" name="card" maxlength=19 data-validate="required:请输入银行卡号" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>持卡人<strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" name="cardholder" data-validate="required:请输入持卡人" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>开户行名称<strong style="color: red"> * </strong></label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" name="bank_name" data-validate="required:请输入开户行名称" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>提成率<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" name="rate" value="" data-validate="required:请输入提成率" placeholder="百分比(如12.5%填12.5)"/>                   
+                </div>             
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>余额<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" name="remain_money" value="0" disabled/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>自助柜数量<strong style="color: red"> * </strong> </label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" name="device_number" disabled value="0" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group status" style="display: none;">
+                <div class="label">
+                    <label>状态</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" name="status" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group register_date" style="display: none;">
+                <div class="label">
+                    <label>注册时间</label>
+                </div>
+                <div class="field">
+                    <input type="date" class="input w50" name="register_date" />
+                </div>
+            </div>
+            <div class="form-group" style="text-align: center;">
+                <button class="button bg-blue icon-check-square-o" type="submit" id="submitBtn"> 提交</button>
+                <button class="button bg-red icon-undo" type="button" id="cancalBtn"> 取消</button>
+            </div>
+        </form>
+    </div>
+    <div class="body-content panel admin-panel" id="seeAboutBox" style="display: none;padding: 10px;border: 0;">
+        <table class="seeAbout table table-striped">
+            <tr>
+                <td>商家编号：<span class="merchant_number"></span></td>
+                <td>商家账号：<span class="merchant_account"></span></td>
+                <td>商家名称：<span class="merchant_name"></span></td>
+            </tr>
+            <tr>
+                <td>商家类型：<span class="merchant_type"></span></td>
+                <td>商家联系人：<span class="merchant_linker"></span></td>
+                <td>联系电话：<span class="merchant_linker_phone"></span></td>
+            </tr>
+            <tr>
+                <td>开户行名称：<span class="bank_name"></span></td>
+                <td>持卡人：<span class="cardholder"></span></td>
+                <td>银行卡号：<span class="card"></span></td>
+            </tr>
+            <tr>
+                <td>地区：<span class="region_code"></span></td>
+                <td>提成率：<span class="rate"></span></td>
+                <td>余额：<span class="remain_money"></span></td>
+            </tr>
+            <tr>
+                <td>自助柜数量：<span class="device_number"></span></td>
+                <td>状态：<span class="status"></span></td>
+                <td>注册时间：<span class="register_date"></span></td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

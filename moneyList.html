@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>moneyList</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+</head>
+
+<body>
+        <div class="panel admin-panel">
+            <div class="panel-head"><strong class="icon-reorder"> 资金明细列表</strong></div>
+                <table class="table" style="padding: 10px;border-bottom:1px solid #ddd;">
+                    <tr style="padding: 10px;border-bottom:1px solid #ddd;">
+                        <td colspan="16" style="text-align:left;padding-left:15px;">
+                        <span>商家账户 </span>
+                        <input type="text" name="merchant_account" style="padding:5px; margin-right:20px;border:1px solid #ddd;" placeholder="默认为全部">
+                        <span>交易类型 </span>
+                        <select name="money_type" style="padding:5px 15px; margin-right:30px;border:1px solid #ddd; ">
+                            <option value="0">提成</option>
+                            <option value="1">提现</option>
+                        </select>
+                        <a href="javascript:void(0)" class="button border-blue icon-search" style="padding:5px 15px; margin:0 10px;" onclick="loadList(page);"> 查询</a>
+                        <span class="tips1" style="color: red ">注：通过商家名称查寻历史记录。</span>
+                    </td>
+                    </tr>
+                </table>
+                <table class="table table-hover text-center">
+                    <thead>
+                    <tr style="text-align:left">
+                        <th>序号</th>
+                        <th>交易时间</th>
+                        <th>商家编号</th>
+                        <th>商家名称</th>
+                        <th>商家类型</th>
+                        <th>交易内容</th>
+                        <th>交易金额</th>
+                        <th>卡号</th>
+                        <th>持卡人</th>
+                        <th>微信</th>                      
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th>状态</th>
+                        <th>交易类型</th>
+                    </tr>  
+                    </thead>
+                    <tbody name="list" id="list">
+                    </tbody>
+                </table>
+                <ul style="padding:5px 15px; border-top:1px solid #ddd;text-align: right;">
+                <li colspan="13">
+                    <div class="pagelist">
+                        <a href="javascript:void(0);" id="prev">上一页</a>
+                        <a href="javascript:void(0);" id="next">下一页</a>&nbsp;第<span id="cur_page">0</span>页/共<span id="page_count">0</span>页</div>
+                </li>
+            </ul>            
+        </div>
+</body>
+
+</html>
